@@ -17,8 +17,6 @@ request.onerror = function(event) {
   console.log(event.target.errorCode);
 };
 
-window.addEventListener("online", checkDatabase);
-
 request.onsuccess = function(event) {
   db = event.target.result;
 
@@ -26,6 +24,9 @@ request.onsuccess = function(event) {
     checkDatabase();
   }
 };
+
+window.addEventListener("online", checkDatabase);
+
 
 function checkDatabase() {
   const transaction = db.transaction(["pending"], "readwrite");
@@ -52,9 +53,9 @@ function checkDatabase() {
   };
 }
 
-// TODO: add code to saveRecord so that it accepts a record object for a
-// transaction and saves it in the db. This function is called in index.js
-// when the user creates a transaction while offline.
+
 function saveRecord(record) {
-  // add your code here
+  const transaction = db.transaction(["pending"], "readwrite");
+  const store = transaction.objectStore("pending");
+  store.add(record);
 }
