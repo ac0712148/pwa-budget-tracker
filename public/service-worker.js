@@ -10,7 +10,9 @@ const FILES_TO_CACHE = [
     "/index.html",
     "/index.js",
     "/manifest.json",
-    "/style.css"
+    "/style.css",
+    "/icons/icon-192x192.png",
+    "/icons/icon-512x512.png"
 ];
 
 const CACHE_NAME = "static-cache-v2";
@@ -44,7 +46,7 @@ self.addEventListener("activate", (event) => {
 });
 
 self.addEventListener("fetch", (event) => {
-    if (event.request.url.includes("/api/")) {
+    if (event.request.url.includes("/api/") && event.request.method === "GET") {
       event.respondWith(
         caches.open(DATA_CACHE_NAME).then(cache => {
           return fetch(event.request)
@@ -62,10 +64,8 @@ self.addEventListener("fetch", (event) => {
     }
   
     event.respondWith(
-      caches.open(CACHE_NAME).then(cache => {
-        return cache.match(event.request).then(response => {
-          return response || fetch(event.request);
-        });
+      cache.match(event.request).then(response => {
+        return response || fetch(event.request);
       })
     );
 });
