@@ -11,15 +11,26 @@ const request = indexedDB.open("budget", 1);
 request.onupgradeneeded = function(event) {
   const db = event.target.result;
   db.createObjectStore("pending", { autoIncrement: true })
-}
+};
 
 request.onerror = function(event) {
   console.log(event.target.errorCode);
-}
+};
 
 // TODO: add code so that any transactions stored in the db
 // are sent to the backend if/when the user goes online
 // Hint: learn about "navigator.onLine" and the "online" window event.
+request.onsuccess = function(event) {
+  db = event.target.result;
+
+  if(navigator.onLine) {
+    checkDatabase();
+  }
+};
+
+function checkDatabase() {
+  
+}
 
 // TODO: add code to saveRecord so that it accepts a record object for a
 // transaction and saves it in the db. This function is called in index.js
